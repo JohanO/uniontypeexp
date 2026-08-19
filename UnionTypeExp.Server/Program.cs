@@ -1,3 +1,5 @@
+using UnionTypeExp.Server;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
@@ -20,22 +22,31 @@ if (app.Environment.IsDevelopment())
 }
 
 
-string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+List<Customer> customers = new()
+{
+    new(new("Donald Duck"), new EmailAddress("donald.duck@example.com")),
+    new(new("Mickey Mouse"), new PhoneNumber("+1234567890")),
+    new(new("Goofy"), new EmailAndPhone(new("goofy@example.com"), new("+19876543210"))),
+};
 
 var api = app.MapGroup("/api");
-api.MapGet("weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+api.MapGet("customers", () => customers)
+   .WithName("GetCustomers");
+
+api.MapPost("customers", (Customer customer) =>
+    {
+        customers.Add(customer);
+        return Results.Ok();
+    })
+    .WithName("AddCustomer");
+
+api.MapPost("notify", (string promotion) =>
+    {
+        customers.ForEach(customer => NotifyCustomerAboutPromotion(customer, promotion));
+        return Results.Ok();
+    })
+   .WithName("NotifyAllCustomers");
+
 
 app.MapDefaultEndpoints();
 
@@ -43,7 +54,26 @@ app.UseFileServer();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+
+IResult NotifyCustomerAboutPromotion(Customer customer, string promotion) =>
+    customer.ContactInfo switch 
+    {
+        EmailAddress email => NotifyByEmail(email, promotion),
+        PhoneNumber phone => NotifyByPhone(phone, promotion),
+        EmailAndPhone emailAndPhone => NotifyByEmail(emailAndPhone.Email, promotion),
+        null => throw new InvalidOperationException("Internal server error: Customer has no contact information. This should not happen.")
+    };
+
+IResult NotifyByEmail(EmailAddress email, string promotion)
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    // Logic to send an email notification
+    Console.WriteLine($"Sending email to: {email} about {promotion}");
+    return Results.Ok();
+}
+
+IResult NotifyByPhone(PhoneNumber phoneNumber, string promotion)
+{
+    // Logic to send a phone notification
+    Console.WriteLine($"Sending SMS to: {phoneNumber} about {promotion}");
+    return Results.Ok();
 }
