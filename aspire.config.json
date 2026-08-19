@@ -1,5 +1,5 @@
 {
   "appHost": {
-    "path": "AspireApp.AppHost/AspireApp.AppHost.csproj"
+    "path": "UnionTypeExp.AppHost/UnionTypeExp.AppHost.csproj"
   }
 }

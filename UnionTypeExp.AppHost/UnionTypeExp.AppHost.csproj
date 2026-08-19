@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <AspireUseCliBundle>true</AspireUseCliBundle>
     <UserSecretsId>ebd8427b-c0bb-467d-b8b9-aae27417ad88</UserSecretsId>
   </PropertyGroup>
@@ -14,6 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.JavaScript" Version="13.5.0" />
+    <PackageReference Include="Aspire.Hosting.JavaScript" />
   </ItemGroup>
 </Project>

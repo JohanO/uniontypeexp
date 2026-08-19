@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="frontend/frontend.esproj">
+    <Build />
+  </Project>
+  <Project Path="UnionTypeExp.AppHost/UnionTypeExp.AppHost.csproj" />
+  <Project Path="UnionTypeExp.Server/UnionTypeExp.Server.csproj" />
+</Solution>

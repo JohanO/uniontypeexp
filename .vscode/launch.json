@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dbg AppHost",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build apphost",
+      "program": "${workspaceFolder}/UnionTypeExp.AppHost/bin/Debug/net11.0/UnionTypeExp.AppHost.dll",
+      "cwd": "${workspaceFolder}/UnionTypeExp.AppHost",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": "Dbg Server",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build server",
+      "program": "${workspaceFolder}/UnionTypeExp.Server/bin/Debug/net11.0/UnionTypeExp.Server.dll",
+      "cwd": "${workspaceFolder}/UnionTypeExp.Server",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  ]
+}
