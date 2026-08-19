@@ -2,9 +2,9 @@
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.0.0
 MinimumVisualStudioVersion = 17.8.0.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspireApp.AppHost", "AspireApp.AppHost\AspireApp.AppHost.csproj", "{7D95137B-1536-46E2-B63B-2B3677B2C267}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnionTypeExp.AppHost", "UnionTypeExp.AppHost\UnionTypeExp.AppHost.csproj", "{7D95137B-1536-46E2-B63B-2B3677B2C267}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspireApp.Server", "AspireApp.Server\AspireApp.Server.csproj", "{68755C68-6F4F-467A-AFDA-8949CD88D10B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnionTypeExp.Server", "UnionTypeExp.Server\UnionTypeExp.Server.csproj", "{68755C68-6F4F-467A-AFDA-8949CD88D10B}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "frontend", "frontend\frontend.esproj", "{E5D188B7-BD48-48AF-BA57-57DAFA8F1FB9}"
 EndProject

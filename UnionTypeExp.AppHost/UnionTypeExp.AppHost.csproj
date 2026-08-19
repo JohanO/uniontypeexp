@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspireApp.Server\AspireApp.Server.csproj" />
+    <ProjectReference Include="..\UnionTypeExp.Server\UnionTypeExp.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>
