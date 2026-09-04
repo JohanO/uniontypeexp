@@ -5,5 +5,6 @@
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 </Project>

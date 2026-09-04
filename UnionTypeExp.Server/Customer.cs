@@ -8,11 +8,11 @@ public record NonEmptyString
 
     public NonEmptyString(string value)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
         Value = value;
     }
 
-    public static implicit operator string(NonEmptyString nonEmptyString) => nonEmptyString.Value; 
+    public static implicit operator string(NonEmptyString nonEmptyString) => nonEmptyString.Value;
 }
 
 public partial record EmailAddress
@@ -26,7 +26,7 @@ public partial record EmailAddress
 
     public EmailAddress(string value)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
         if (!EmailRegex.IsMatch(value))
         {
@@ -36,7 +36,7 @@ public partial record EmailAddress
         Value = value;
     }
 
-    public static implicit operator string(EmailAddress emailAddress) => emailAddress.Value; 
+    public static implicit operator string(EmailAddress emailAddress) => emailAddress.Value;
 }
 
 public partial record PhoneNumber
@@ -50,7 +50,7 @@ public partial record PhoneNumber
 
     public PhoneNumber(string value)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
         if (!PhoneNumberRegex.IsMatch(value))
         {
@@ -60,12 +60,12 @@ public partial record PhoneNumber
         Value = value;
     }
 
-    public static implicit operator string(PhoneNumber phoneNumber) => phoneNumber.Value; 
+    public static implicit operator string(PhoneNumber phoneNumber) => phoneNumber.Value;
 }
 
 public record EmailAndPhone(EmailAddress Email, PhoneNumber Phone);
 
-public union ContactInfo(EmailAddress, PhoneNumber, EmailAndPhone);
+public readonly union ContactInfo(EmailAddress, PhoneNumber, EmailAndPhone); // NOSONAR
 
 public record Customer(NonEmptyString Name, ContactInfo ContactInfo);
 
@@ -77,15 +77,14 @@ public static class CustomerExtensions
             EmailAddress email => $"Email: {email}",
             PhoneNumber phone => $"Phone: {phone}",
             EmailAndPhone emailAndPhone => $"Email: {emailAndPhone.Email}, Phone: {emailAndPhone.Phone}",
-            null => throw new InvalidOperationException("Internal server error: Customer has no contact information. This should not happen.")
         };
 }
 
 // Adding a new contact info type is easy and does not require changes to existing code. For example, we can add a new contact info with two email addresses.
-// public record TwoEmailAddresses(EmailAddress Email1, EmailAddress Email2);
+public record TwoEmailAddresses(EmailAddress Email1, EmailAddress Email2);
 
 // Then changing the union type to include the new contact info type is also easy and does not require changes to existing code. The compiler will complain about missing cases in the switch expressions, which is a good thing because it forces us to handle the new contact info type.
-// public union ContactInfo(EmailAddress, PhoneNumber, EmailAndPhone, TwoEmailAddresses);
+// public readonly union ContactInfo(EmailAddress, PhoneNumber, EmailAndPhone, TwoEmailAddresses); // NOSONAR
 
 
 // -----------------------------
@@ -113,13 +112,13 @@ public static class CustomerWithoutUnionTypesExtensions
 // ----------------------------
 
 // Version using classical inheritance
-public abstract record ContactInfoBase;
+public interface IContactInfo;
 
-public record EmailContactInfo(EmailAddress Email) : ContactInfoBase;
-public record PhoneContactInfo(PhoneNumber Phone) : ContactInfoBase;
-public record EmailAndPhoneContactInfo(EmailAddress Email, PhoneNumber Phone) : ContactInfoBase;
+public record EmailContactInfo(EmailAddress Email) : IContactInfo;
+public record PhoneContactInfo(PhoneNumber Phone) : IContactInfo;
+public record EmailAndPhoneContactInfo(EmailAddress Email, PhoneNumber Phone) : IContactInfo;
 
-public record CustomerWithInheritance(NonEmptyString Name, ContactInfoBase ContactInfo);
+public record CustomerWithInheritance(NonEmptyString Name, IContactInfo ContactInfo);
 
 public static class CustomerWithInheritanceExtensions
 {
@@ -135,7 +134,7 @@ public static class CustomerWithInheritanceExtensions
 }
 
 // Adding a new contact info type is easy and does not require changes to existing code. For example, we can add a new contact info with two email addresses.
-//public record TwoEmailAddressesContactInfo(EmailAddress Email1, EmailAddress Email2) : ContactInfoBase;
+//public record TwoEmailAddressesContactInfo(EmailAddress Email1, EmailAddress Email2) : IContactInfo; // NOSONAR
 
 // The existing switch expression will have to be updated to handle the new contact info type.
 // The compiler will NOT complain about missing cases in the switch expressions as we have already covered the 'not null' case,
