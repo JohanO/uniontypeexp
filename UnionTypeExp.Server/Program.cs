@@ -22,12 +22,12 @@ if (app.Environment.IsDevelopment())
 }
 
 
-List<Customer> customers = new()
-{
-    new(new("Donald Duck"), new EmailAddress("donald.duck@example.com")),
-    new(new("Mickey Mouse"), new PhoneNumber("+1234567890")),
+List<Customer> customers =
+[
+    new(new("Donald Duck"), new Email("donald.duck@example.com")),
+    new(new("Mickey Mouse"), new Phone("+1234567890")),
     new(new("Goofy"), new EmailAndPhone(new("goofy@example.com"), new("+19876543210"))),
-};
+];
 
 var api = app.MapGroup("/api");
 api.MapGet("customers", () => customers)
@@ -52,28 +52,27 @@ app.MapDefaultEndpoints();
 
 app.UseFileServer();
 
-app.Run();
+await app.RunAsync();
 
 
 IResult NotifyCustomerAboutPromotion(Customer customer, string promotion) =>
-    customer.ContactInfo switch 
+    customer.ContactInfo switch
     {
-        EmailAddress email => NotifyByEmail(email, promotion),
-        PhoneNumber phone => NotifyByPhone(phone, promotion),
+        Email email => NotifyByEmail(email, promotion),
+        Phone phone => NotifyByPhone(phone, promotion),
         EmailAndPhone emailAndPhone => NotifyByEmail(emailAndPhone.Email, promotion),
-        null => throw new InvalidOperationException("Internal server error: Customer has no contact information. This should not happen.")
     };
 
-IResult NotifyByEmail(EmailAddress email, string promotion)
+IResult NotifyByEmail(Email email, string promotion)
 {
     // Logic to send an email notification
     Console.WriteLine($"Sending email to: {email} about {promotion}");
     return Results.Ok();
 }
 
-IResult NotifyByPhone(PhoneNumber phoneNumber, string promotion)
+IResult NotifyByPhone(Phone phone, string promotion)
 {
     // Logic to send a phone notification
-    Console.WriteLine($"Sending SMS to: {phoneNumber} about {promotion}");
+    Console.WriteLine($"Sending SMS to: {phone} about {promotion}");
     return Results.Ok();
 }
